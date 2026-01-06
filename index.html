@@ -63,8 +63,7 @@ var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
 
 
 var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-  min: 0,
-  max: 50000000,
+  strictMinMaxSelection: true,
   renderer: am5xy.AxisRendererY.new(root, {})
 }));
 
