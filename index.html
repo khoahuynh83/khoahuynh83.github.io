@@ -63,6 +63,14 @@ function generateDatas(count) {
   return data;
 }
 
+function convertDate(dateStr) {
+  // Tách theo dấu "/"
+  const [day, month, year] = dateStr.split("/");
+
+  // Ghép lại theo định dạng mm/dd/yyyy
+  return `${month}/${day}/${year}`;
+}
+
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
@@ -132,7 +140,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 alert(lines.length);
       for (let i = 1; i < 5; i++) {
         let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());alert(JSON.stringify(parts));
-        const [dateStr, valueStr] = [parts[0], parts[1]];
+        const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];
         const date = new Date(dateStr.trim()).getTime();alert("date: " + date);
         const value = parseFloat(valueStr.trim());alert("value: " + value);
         if (!isNaN(date) && !isNaN(value)) {alert("in iff");
