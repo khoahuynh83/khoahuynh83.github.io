@@ -131,7 +131,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
       const data = [];
 alert(lines.length);
       for (let i = 1; i < 5; i++) {
-        const [dateStr, valueStr] = lines[i].split(",");
+        let parts = line[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+        const [dateStr, valueStr] = [parts[0], parts[1]];
         const date = new Date(dateStr.trim()).getTime();
         const value = parseFloat(valueStr.trim());alert(value);
         if (!isNaN(date) && !isNaN(value)) {alert("in iff");
