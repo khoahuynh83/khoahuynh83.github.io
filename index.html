@@ -69,7 +69,7 @@ var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-var series = chart.series.push(am5xy.LineSeries.new(root, {
+var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Registered",
   xAxis: xAxis,
   yAxis: yAxis,
@@ -148,10 +148,10 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 
       RegisteredData.sort((a, b) => a.date - b.date);
 
-      series.data.setAll(RegisteredData);
+      RegisteredSeries.data.setAll(RegisteredData);
       sbSeries.data.setAll(RegisteredData);
 
-      series.appear(1000);
+      RegisteredSeries.appear(1000);
       chart.appear(1000, 100);
     });
   
