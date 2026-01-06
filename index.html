@@ -122,7 +122,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
         let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
         const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];
         const date = new Date(dateStr.trim()).getTime();
-        const value = parseFloat(valueStr.replace(/,/g, ""));
+        const value = parseInt(valueStr.replace(/,/g, ""));
         if (!isNaN(date) && !isNaN(value)) {
           data.push({ date, value });
         }
