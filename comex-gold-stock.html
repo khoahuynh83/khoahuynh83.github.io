@@ -1,1 +1,208 @@
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+</style>
 
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am5.ready(function() {
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("chartdiv");
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var chart = root.container.children.push(am5xy.XYChart.new(root, {
+  panX: true,
+  panY: true,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  pinchZoomX: true,
+  paddingLeft: 0
+}));
+
+// Add cursor
+// https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+  behavior: "none"
+}));
+cursor.lineY.set("visible", false);
+
+function convertDate(dateStr) {
+  // Tách theo dấu "/"
+  const [day, month, year] = dateStr.split("/");
+
+  // Ghép lại theo định dạng mm/dd/yyyy
+  return `${month}/${day}/${year}`;
+}
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+  baseInterval: { timeUnit: "day", count: 1 },
+  renderer: am5xy.AxisRendererX.new(root, {
+    minorGridEnabled: true
+  }),
+  tooltip: am5.Tooltip.new(root, {})
+}));
+
+
+var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+  autoZoom: true,
+  renderer: am5xy.AxisRendererY.new(root, {})
+}));
+
+// Add series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
+  name: "Registered",
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "RegisteredValue",
+  valueXField: "date",
+  strokeWidth: 5,
+  fill: am5.color(0x007BFF),
+  stroke: am5.color(0x007BFF),
+  tooltip: am5.Tooltip.new(root, {
+    labelText: "Registered: {valueY} (oz)"
+  })
+}));
+
+var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
+  name: "Eligible",
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "EligibleValue",
+  valueXField: "date",
+  strokeWidth: 5,
+  fill: am5.color(0xFF0000),
+  stroke: am5.color(0xFF0000),
+  tooltip: am5.Tooltip.new(root, {
+    labelText: "Eligible: {valueY} (oz)"
+  })
+}));
+
+var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
+  name: "Total",
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "TotalValue",
+  valueXField: "date",
+  strokeWidth: 5,
+  fill: am5.color(0xFFA500),
+  stroke: am5.color(0xFFA500),
+  tooltip: am5.Tooltip.new(root, {
+    labelText: "Total: {valueY} (oz)"
+  })
+}));
+
+
+// Add scrollbar
+// https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+var scrollbar = chart.set("scrollbarX", am5xy.XYChartScrollbar.new(root, {
+  orientation: "horizontal",
+  height: 60
+}));
+
+var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.DateAxis.new(root, {
+  baseInterval: {
+    timeUnit: "day",
+    count: 1
+  },
+  renderer: am5xy.AxisRendererX.new(root, {
+    minorGridEnabled: true,
+    minGridDistance: 70
+  })
+}));
+
+var sbValueAxis = scrollbar.chart.yAxes.push(
+  am5xy.ValueAxis.new(root, {
+    renderer: am5xy.AxisRendererY.new(root, {})
+  })
+);
+
+var RegisteredSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+  valueYField: "RegisteredValue",
+  valueXField: "date",
+  xAxis: sbDateAxis,
+  yAxis: sbValueAxis
+}));
+
+var EligibleSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+  valueYField: "EligibleValue",
+  valueXField: "date",
+  xAxis: sbDateAxis,
+  yAxis: sbValueAxis
+}));
+
+var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+  valueYField: "TotalValue",
+  valueXField: "date",
+  xAxis: sbDateAxis,
+  yAxis: sbValueAxis
+}));
+
+// Load CSV data
+fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY0fZs9nttq4/gviz/tq?tqx=out:csv&gid=0")
+    .then(response => response.text())
+    .then(csv => {
+      const lines = csv.trim().split("\n");
+      const RegisteredData = [];
+	  const EligibleData = [];
+	  const TotalData = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+        const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7]];
+        const date = new Date(dateStr.trim()).getTime();
+        const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
+		const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
+		const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
+        if (!isNaN(date) && !isNaN(RegisteredValue)) {
+          RegisteredData.push({ date, RegisteredValue });
+        }
+		if (!isNaN(date) && !isNaN(EligibleValue)) {
+          EligibleData.push({ date, EligibleValue });
+        }
+		if (!isNaN(date) && !isNaN(TotalValue)) {
+          TotalData.push({ date, TotalValue });
+        }
+      }
+
+      RegisteredData.sort((a, b) => a.date - b.date);
+	  EligibleData.sort((a, b) => a.date - b.date);
+	  TotalData.sort((a, b) => a.date - b.date);
+
+      RegisteredSeries.data.setAll(RegisteredData);
+	  EligibleSeries.data.setAll(EligibleData);
+	  TotalSeries.data.setAll(TotalData);
+      RegisteredSbSeries.data.setAll(RegisteredData);
+	  EligibleSbSeries.data.setAll(EligibleData);
+	  TotalSbSeries.data.setAll(TotalData);
+
+      RegisteredSeries.appear(1000);
+	  EligibleSeries.appear(1000);
+	  TotalSeries.appear(1000);
+      chart.appear(1000, 100);
+    });
+  
+}); // end am5.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
