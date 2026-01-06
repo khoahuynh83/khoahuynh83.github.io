@@ -133,8 +133,8 @@ alert(lines.length);
       for (let i = 1; i < 5; i++) {
         const [dateStr, valueStr] = lines[i].split(",");
         const date = new Date(dateStr.trim()).getTime();
-        const value = parseFloat(valueStr.trim());
-        if (!isNaN(date) && !isNaN(value)) {
+        const value = parseFloat(valueStr.trim());alert("beffore iff");
+        if (!isNaN(date) && !isNaN(value)) {alert("in iff");
           data.push({ date, value });
         }
       }
