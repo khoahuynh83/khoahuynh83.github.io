@@ -70,10 +70,24 @@ var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 var series = chart.series.push(am5xy.LineSeries.new(root, {
-  name: "Series",
+  name: "Registered",
   xAxis: xAxis,
   yAxis: yAxis,
-  valueYField: "value",
+  valueYField: "RegisteredValue",
+  valueXField: "date",
+  strokeWidth: 5,
+  fill: am5.color(0x007BFF),
+  stroke: am5.color(0x007BFF),
+  tooltip: am5.Tooltip.new(root, {
+    labelText: "Registered: {valueY} (oz)"
+  })
+}));
+
+var series = chart.series.push(am5xy.LineSeries.new(root, {
+  name: "Eligible",
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "EligibleValue",
   valueXField: "date",
   strokeWidth: 5,
   fill: am5.color(0x007BFF),
@@ -109,7 +123,7 @@ var sbValueAxis = scrollbar.chart.yAxes.push(
 );
 
 var sbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
-  valueYField: "value",
+  valueYField: "RegisteredValue",
   valueXField: "date",
   xAxis: sbDateAxis,
   yAxis: sbValueAxis
@@ -126,9 +140,9 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
         let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
         const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];
         const date = new Date(dateStr.trim()).getTime();
-        const value = parseFloat(valueStr.replace(/,/g, ""));
-        if (!isNaN(date) && !isNaN(value)) {
-          data.push({ date, value });
+        const RegisteredValue = parseFloat(valueStr.replace(/,/g, ""));
+        if (!isNaN(date) && !isNaN(RegisteredValue)) {
+          data.push({ date, RegisteredValue });
         }
       }
 
