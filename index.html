@@ -129,6 +129,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
         }
       }
 
+      data.sort((a, b) => a.date - b.date);
+
       series.data.setAll(data);
       sbSeries.data.setAll(data);
 
