@@ -122,8 +122,15 @@ var sbValueAxis = scrollbar.chart.yAxes.push(
   })
 );
 
-var sbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+var RegisteredSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
   valueYField: "RegisteredValue",
+  valueXField: "date",
+  xAxis: sbDateAxis,
+  yAxis: sbValueAxis
+}));
+
+var EligibleSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+  valueYField: "EligibleValue",
   valueXField: "date",
   xAxis: sbDateAxis,
   yAxis: sbValueAxis
@@ -156,7 +163,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 
       RegisteredSeries.data.setAll(RegisteredData);
 	  EligibleSeries.data.setAll(EligibleData);
-      sbSeries.data.setAll(RegisteredData);
+      RegisteredSbSeries.data.setAll(RegisteredData);
+	  EligibleSbSeries.data.setAll(EligibleData);
 
       RegisteredSeries.appear(1000);
 	  EligibleSeries.appear(1000);
