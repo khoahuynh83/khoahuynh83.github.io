@@ -137,17 +137,17 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
     .then(csv => {
       const lines = csv.trim().split("\n");
       const data = [];
-alert(lines.length);
-      for (let i = 1; i < 5; i++) {
-        let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());alert(JSON.stringify(parts));
-        const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];alert("parts[1]: " + parts[1]);
-        const date = new Date(dateStr.trim()).getTime();alert("date: " + date);
-        const value = parseFloat(valueStr.replace(/,/g, ""));alert("value: " + value);
-        if (!isNaN(date) && !isNaN(value)) {alert("in iff");
+
+      for (let i = 1; i < lines.length; i++) {
+        let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+        const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];
+        const date = new Date(dateStr.trim()).getTime();
+        const value = parseFloat(valueStr.replace(/,/g, ""));
+        if (!isNaN(date) && !isNaN(value)) {
           data.push({ date, value });
         }
       }
-alert(JSON.stringify(data));
+
       series.data.setAll(data);
       sbSeries.data.setAll(data);
 
