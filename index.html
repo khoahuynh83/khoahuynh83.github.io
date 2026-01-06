@@ -130,7 +130,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
       const lines = csv.trim().split("\n");
       const data = [];
 
-      for (let i = 1; i < 5; i++) {
+      for (let i = 1; i < 5; i++) {alert("here");
         const [dateStr, valueStr] = lines[i].split(",");
         const date = new Date(dateStr.trim()).getTime();
         const value = parseFloat(valueStr.trim());
