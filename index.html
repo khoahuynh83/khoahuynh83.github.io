@@ -134,7 +134,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
     .then(response => response.text())
     .then(csv => {
       const lines = csv.trim().split("\n");
-      const data = [];
+      const RegisteredData = [];
 
       for (let i = 1; i < lines.length; i++) {
         let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
@@ -142,14 +142,14 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
         const date = new Date(dateStr.trim()).getTime();
         const RegisteredValue = parseFloat(valueStr.replace(/,/g, ""));
         if (!isNaN(date) && !isNaN(RegisteredValue)) {
-          data.push({ date, RegisteredValue });
+          RegisteredData.push({ date, RegisteredValue });
         }
       }
 
-      data.sort((a, b) => a.date - b.date);
+      RegisteredData.sort((a, b) => a.date - b.date);
 
-      series.data.setAll(data);
-      sbSeries.data.setAll(data);
+      series.data.setAll(RegisteredData);
+      sbSeries.data.setAll(RegisteredData);
 
       series.appear(1000);
       chart.appear(1000, 100);
