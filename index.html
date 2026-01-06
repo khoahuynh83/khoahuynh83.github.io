@@ -83,7 +83,7 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   })
 }));
 
-/*var series = chart.series.push(am5xy.LineSeries.new(root, {
+var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Eligible",
   xAxis: xAxis,
   yAxis: yAxis,
@@ -93,9 +93,9 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Registered: {valueY} (oz)"
+    labelText: "Eligible: {valueY} (oz)"
   })
-}));*/
+}));
 
 
 // Add scrollbar
@@ -135,23 +135,31 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
     .then(csv => {
       const lines = csv.trim().split("\n");
       const RegisteredData = [];
+	  const EligibleData = [];
 
       for (let i = 1; i < lines.length; i++) {
         let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-        const [dateStr, valueStr] = [convertDate(parts[0]), parts[1]];
+        const [dateStr, RegisteredValueStr, EligibleValueStr] = [convertDate(parts[0]), parts[1], parts[3]];
         const date = new Date(dateStr.trim()).getTime();
-        const RegisteredValue = parseFloat(valueStr.replace(/,/g, ""));
+        const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
+		const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
         if (!isNaN(date) && !isNaN(RegisteredValue)) {
           RegisteredData.push({ date, RegisteredValue });
+        }
+		if (!isNaN(date) && !isNaN(EligibleValue)) {
+          EligibleData.push({ date, EligibleValue });
         }
       }
 
       RegisteredData.sort((a, b) => a.date - b.date);
+	  EligibleData.sort((a, b) => a.date - b.date);
 
       RegisteredSeries.data.setAll(RegisteredData);
+	  EligibleSeries.data.setAll(EligibleData);
       sbSeries.data.setAll(RegisteredData);
 
       RegisteredSeries.appear(1000);
+	  EligibleSeries.appear(1000);
       chart.appear(1000, 100);
     });
   
