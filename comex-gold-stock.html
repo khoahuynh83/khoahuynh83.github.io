@@ -199,7 +199,6 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		x: am5.p50,
 		centerX: am5.p50
 	  }));
-	  legend.data.setAll(chart.series.values);
 	  
 	  // When legend item container is hovered, dim all the series except the hovered one
 legend.itemContainers.template.events.on("pointerover", function(e) {
@@ -234,7 +233,8 @@ legend.itemContainers.template.events.on("pointerout", function(e) {
       stroke: chartSeries.get("fill")
     });
   });
-})
+});
+legend.data.setAll(chart.series.values);
 
       RegisteredSeries.data.setAll(RegisteredData);
 	  EligibleSeries.data.setAll(EligibleData);
