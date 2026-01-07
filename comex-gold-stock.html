@@ -79,7 +79,7 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Registered: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
 
@@ -93,7 +93,7 @@ var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0xFF0000),
   stroke: am5.color(0xFF0000),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Eligible: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
 
@@ -107,7 +107,7 @@ var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Total: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
 
@@ -206,3 +206,6 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 
 <!-- HTML -->
 <div id="chartdiv"></div>
+https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
+https://www.amcharts.com/demos/combined-bullet-column-line-chart/
+https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
