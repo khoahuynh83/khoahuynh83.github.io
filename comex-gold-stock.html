@@ -110,6 +110,14 @@ var RegisteredGoldStockChart_yAxis = RegisteredGoldStockChart.yAxes.push(am5xy.V
   autoZoom: true,
   renderer: am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {})
 }));
+var yRenderer1 = am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {
+  opposite: true
+});
+var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.ValueAxis.new(RegisteredGoldStockRoot, {
+  //logarithmic: true,
+  renderer: yRenderer1,
+  syncWithAxis: RegisteredGoldStockChart_yAxis
+}));
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
