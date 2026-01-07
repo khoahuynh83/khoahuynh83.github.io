@@ -82,7 +82,7 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   })
 }));
 RegisteredSeries.strokes.template.setAll({
-  strokeWidth: 5
+  strokeWidth: 2
 });
 
 var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
@@ -98,6 +98,9 @@ var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
+EligibleSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Total",
@@ -112,7 +115,9 @@ var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
-
+TotalSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 // Add scrollbar
 // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
