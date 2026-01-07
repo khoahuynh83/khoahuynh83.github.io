@@ -85,14 +85,13 @@ function convertDate(dateStr) {
 
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-var xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
+var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
   renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
     minorGridEnabled: true
   }),
   tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
-
 
 var yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
   //logarithmic: true,
@@ -104,7 +103,7 @@ var yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 var RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Registered",
-  xAxis: xAxis,
+  xAxis: GoldStockChart_xAxis,
   yAxis: yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
@@ -120,7 +119,7 @@ RegisteredSeries.strokes.template.setAll({
 
 var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Eligible",
-  xAxis: xAxis,
+  xAxis: GoldStockChart_xAxis,
   yAxis: yAxis,
   valueYField: "EligibleValue",
   valueXField: "date",
@@ -137,7 +136,7 @@ EligibleSeries.strokes.template.setAll({
 
 var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Total",
-  xAxis: xAxis,
+  xAxis: GoldStockChart_xAxis,
   yAxis: yAxis,
   valueYField: "TotalValue",
   valueXField: "date",
