@@ -78,8 +78,9 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   strokeWidth: 5,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
+  legendLabelText: "Series: {name}",
+    legendRangeLabelText: "Series: {name}",
   tooltip: am5.Tooltip.new(root, {
-	pointerOrientation: "horizontal",
     labelText: "{name}: {valueY} (oz)"
   })
 }));
