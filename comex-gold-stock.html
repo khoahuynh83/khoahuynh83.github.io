@@ -128,6 +128,21 @@ var GoldStockChart_RegisteredSeries = GoldStockChart.series.push(am5xy.LineSerie
 GoldStockChart_RegisteredSeries.strokes.template.setAll({
   strokeWidth: 2
 });
+var RegisteredGoldStockChart_RegisteredSeries = RegisteredGoldStockChart.series.push(am5xy.LineSeries.new(RegisteredGoldStockRoot, {
+  name: "Registered",
+  xAxis: GoldStockChart_xAxis,
+  yAxis: GoldStockChart_yAxis,
+  valueYField: "RegisteredValue",
+  valueXField: "date",
+  fill: am5.color(0x007BFF),
+  stroke: am5.color(0x007BFF),
+  tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {
+    labelText: "{name}: {valueY} (oz)"
+  })
+}));
+RegisteredGoldStockChart_RegisteredSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Eligible",
@@ -277,6 +292,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		legend.data.setAll(GoldStockChart.series.values);
 		
 		GoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
+		RegisteredGoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
 		EligibleSeries.data.setAll(EligibleData);
 		TotalSeries.data.setAll(TotalData);
 		RegisteredSbSeries.data.setAll(RegisteredData);
@@ -284,6 +300,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalSbSeries.data.setAll(TotalData);
 		
 		GoldStockChart_RegisteredSeries.appear(1000);
+		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
 		EligibleSeries.appear(1000);
 		TotalSeries.appear(1000);
 		GoldStockChart.appear(1000, 100);
