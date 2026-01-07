@@ -166,7 +166,8 @@ var RegisteredGoldStockChart_ChangeOfRegisteredSeries = RegisteredGoldStockChart
   })
 );
 RegisteredGoldStockChart_ChangeOfRegisteredSeries.columns.template.setAll({
- fill: am5.color(0xFF0000)
+ fill: am5.color(0xFF0000),
+ stroke: am5.color(0xFF0000)
 });
 
 var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
