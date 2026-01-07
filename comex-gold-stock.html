@@ -130,8 +130,8 @@ GoldStockChart_RegisteredSeries.strokes.template.setAll({
 });
 var RegisteredGoldStockChart_RegisteredSeries = RegisteredGoldStockChart.series.push(am5xy.LineSeries.new(RegisteredGoldStockRoot, {
   name: "Registered",
-  xAxis: GoldStockChart_xAxis,
-  yAxis: GoldStockChart_yAxis,
+  xAxis: RegisteredGoldStockChart_xAxis,
+  yAxis: RegisteredGoldStockChart_yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
   fill: am5.color(0x007BFF),
@@ -295,6 +295,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		RegisteredGoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
 		EligibleSeries.data.setAll(EligibleData);
 		TotalSeries.data.setAll(TotalData);
+		
 		RegisteredSbSeries.data.setAll(RegisteredData);
 		EligibleSbSeries.data.setAll(EligibleData);
 		TotalSbSeries.data.setAll(TotalData);
