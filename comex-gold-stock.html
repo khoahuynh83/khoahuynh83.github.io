@@ -36,6 +36,15 @@ var chart = root.container.children.push(am5xy.XYChart.new(root, {
   paddingLeft: 0
 }));
 
+// Chart title
+var title = chart.plotContainer.children.push(am5.Label.new(root, {
+  text: "COMEX Gold Stock",
+  fontSize: 20,
+  fontWeight: "400",
+  x: am5.p50,
+  centerX: am5.p50
+}))
+
 // Add cursor
 // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
 var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
