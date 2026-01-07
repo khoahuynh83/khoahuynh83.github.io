@@ -224,6 +224,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			var series = itemContainer.dataItem.dataContext;
 			chart.series.each(function(chartSeries) {
 				chartSeries.strokes.template.setAll({
+					strokeOpacity: 1,
 					strokeWidth: 2,
 					stroke: chartSeries.get("fill")
 				});
