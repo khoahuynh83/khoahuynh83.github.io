@@ -15,19 +15,20 @@
 <script>
 am5.ready(function() {
 
-// Create root element
+// Create element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("GoldStockchartdiv");
+var GoldStockRoot = am5.Root.new("GoldStockchartdiv");
+var RegisteredGoldStockRoot = am5.Root.new("RegisteredGoldStockchartdiv");
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
-root.setThemes([
-  am5themes_Animated.new(root)
+GoldStockRoot.setThemes([
+  am5themes_Animated.new(GoldStockRoot)
 ]);
 
 // Create chart
 // https://www.amcharts.com/docs/v5/charts/xy-chart/
-var chart = root.container.children.push(am5xy.XYChart.new(root, {
+var chart = GoldStockRoot.container.children.push(am5xy.XYChart.new(GoldStockRoot, {
   panX: true,
   panY: true,
   wheelX: "panX",
@@ -37,7 +38,7 @@ var chart = root.container.children.push(am5xy.XYChart.new(root, {
 }));
 
 // Chart title
-var title = chart.plotContainer.children.push(am5.Label.new(root, {
+var title = chart.plotContainer.children.push(am5.Label.new(GoldStockRoot, {
   text: "COMEX Gold Stock",
   fontSize: 20,
   fontWeight: "400",
@@ -47,7 +48,7 @@ var title = chart.plotContainer.children.push(am5.Label.new(root, {
 
 // Add cursor
 // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
-var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+var cursor = chart.set("cursor", am5xy.XYCursor.new(GoldStockRoot, {
   behavior: "none"
 }));
 cursor.lineY.set("visible", false);
@@ -62,24 +63,24 @@ function convertDate(dateStr) {
 
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+var xAxis = chart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
-  renderer: am5xy.AxisRendererX.new(root, {
+  renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
     minorGridEnabled: true
   }),
-  tooltip: am5.Tooltip.new(root, {})
+  tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
 
 
-var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
   //logarithmic: true,
   autoZoom: true,
-  renderer: am5xy.AxisRendererY.new(root, {})
+  renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
 }));
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
+var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Registered",
   xAxis: xAxis,
   yAxis: yAxis,
@@ -87,7 +88,7 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   valueXField: "date",
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
-  tooltip: am5.Tooltip.new(root, {
+  tooltip: am5.Tooltip.new(GoldStockRoot, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
@@ -95,7 +96,7 @@ RegisteredSeries.strokes.template.setAll({
   strokeWidth: 2
 });
 
-var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
+var EligibleSeries = chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Eligible",
   xAxis: xAxis,
   yAxis: yAxis,
@@ -104,7 +105,7 @@ var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   strokeWidth: 5,
   fill: am5.color(0xFF0000),
   stroke: am5.color(0xFF0000),
-  tooltip: am5.Tooltip.new(root, {
+  tooltip: am5.Tooltip.new(GoldStockRoot, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
@@ -112,7 +113,7 @@ EligibleSeries.strokes.template.setAll({
   strokeWidth: 2
 });
 
-var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
+var TotalSeries = chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Total",
   xAxis: xAxis,
   yAxis: yAxis,
@@ -121,7 +122,7 @@ var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
   strokeWidth: 5,
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
-  tooltip: am5.Tooltip.new(root, {
+  tooltip: am5.Tooltip.new(GoldStockRoot, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
@@ -131,43 +132,43 @@ TotalSeries.strokes.template.setAll({
 
 // Add scrollbar
 // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
-var scrollbar = chart.set("scrollbarX", am5xy.XYChartScrollbar.new(root, {
+var scrollbar = chart.set("scrollbarX", am5xy.XYChartScrollbar.new(GoldStockRoot, {
   orientation: "horizontal",
   height: 60
 }));
 
-var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.DateAxis.new(root, {
+var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
   baseInterval: {
     timeUnit: "day",
     count: 1
   },
-  renderer: am5xy.AxisRendererX.new(root, {
+  renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
     minorGridEnabled: true,
     minGridDistance: 70
   })
 }));
 
 var sbValueAxis = scrollbar.chart.yAxes.push(
-  am5xy.ValueAxis.new(root, {
-    renderer: am5xy.AxisRendererY.new(root, {})
+  am5xy.ValueAxis.new(GoldStockRoot, {
+    renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
   })
 );
 
-var RegisteredSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+var RegisteredSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   valueYField: "RegisteredValue",
   valueXField: "date",
   xAxis: sbDateAxis,
   yAxis: sbValueAxis
 }));
 
-var EligibleSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+var EligibleSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   valueYField: "EligibleValue",
   valueXField: "date",
   xAxis: sbDateAxis,
   yAxis: sbValueAxis
 }));
 
-var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
+var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   valueYField: "TotalValue",
   valueXField: "date",
   xAxis: sbDateAxis,
@@ -206,7 +207,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalData.sort((a, b) => a.date - b.date);
 		
 		// Add legend
-		var legend = chart.children.push(am5.Legend.new(root, {
+		var legend = chart.children.push(am5.Legend.new(GoldStockRoot, {
 			x: am5.p50,
 			centerX: am5.p50
 		}));
@@ -259,6 +260,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 
 <!-- HTML -->
 <div id="GoldStockchartdiv"></div>
+<div id="RegisteredGoldStockchartdiv"></div>
 https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
 https://www.amcharts.com/demos/combined-bullet-column-line-chart/
 https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
