@@ -1,6 +1,6 @@
 <!-- Styles -->
 <style>
-#chartdiv {
+#GoldStockchartdiv {
   width: 100%;
   height: 500px;
 }
@@ -17,7 +17,7 @@ am5.ready(function() {
 
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("chartdiv");
+var root = am5.Root.new("GoldStockchartdiv");
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
@@ -35,6 +35,15 @@ var chart = root.container.children.push(am5xy.XYChart.new(root, {
   pinchZoomX: true,
   paddingLeft: 0
 }));
+
+// Chart title
+var title = chart.plotContainer.children.push(am5.Label.new(root, {
+  text: "COMEX Gold Stock",
+  fontSize: 20,
+  fontWeight: "400",
+  x: am5.p50,
+  centerX: am5.p50
+}))
 
 // Add cursor
 // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
@@ -63,6 +72,7 @@ var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
 
 
 var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+  //logarithmic: true,
   autoZoom: true,
   renderer: am5xy.AxisRendererY.new(root, {})
 }));
@@ -75,13 +85,15 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   yAxis: yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
-  strokeWidth: 5,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Registered: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
+RegisteredSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Eligible",
@@ -93,9 +105,12 @@ var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0xFF0000),
   stroke: am5.color(0xFF0000),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Eligible: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
+EligibleSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Total",
@@ -107,10 +122,12 @@ var TotalSeries = chart.series.push(am5xy.LineSeries.new(root, {
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
   tooltip: am5.Tooltip.new(root, {
-    labelText: "Total: {valueY} (oz)"
+    labelText: "{name}: {valueY} (oz)"
   })
 }));
-
+TotalSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
 
 // Add scrollbar
 // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
@@ -161,48 +178,87 @@ var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
 fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY0fZs9nttq4/gviz/tq?tqx=out:csv&gid=0")
     .then(response => response.text())
     .then(csv => {
-      const lines = csv.trim().split("\n");
-      const RegisteredData = [];
-	  const EligibleData = [];
-	  const TotalData = [];
-
-      for (let i = 1; i < lines.length; i++) {
-        let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-        const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7]];
-        const date = new Date(dateStr.trim()).getTime();
-        const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
-		const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
-		const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
-        if (!isNaN(date) && !isNaN(RegisteredValue)) {
-          RegisteredData.push({ date, RegisteredValue });
-        }
-		if (!isNaN(date) && !isNaN(EligibleValue)) {
-          EligibleData.push({ date, EligibleValue });
-        }
-		if (!isNaN(date) && !isNaN(TotalValue)) {
-          TotalData.push({ date, TotalValue });
-        }
-      }
-
-      RegisteredData.sort((a, b) => a.date - b.date);
-	  EligibleData.sort((a, b) => a.date - b.date);
-	  TotalData.sort((a, b) => a.date - b.date);
-
-      RegisteredSeries.data.setAll(RegisteredData);
-	  EligibleSeries.data.setAll(EligibleData);
-	  TotalSeries.data.setAll(TotalData);
-      RegisteredSbSeries.data.setAll(RegisteredData);
-	  EligibleSbSeries.data.setAll(EligibleData);
-	  TotalSbSeries.data.setAll(TotalData);
-
-      RegisteredSeries.appear(1000);
-	  EligibleSeries.appear(1000);
-	  TotalSeries.appear(1000);
-      chart.appear(1000, 100);
-    });
-  
+		const lines = csv.trim().split("\n");
+		const RegisteredData = [];
+		const EligibleData = [];
+		const TotalData = [];
+		
+		for (let i = 1; i < lines.length; i++) {
+			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7]];
+			const date = new Date(dateStr.trim()).getTime();
+			const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
+			const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
+			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
+			if (!isNaN(date) && !isNaN(RegisteredValue)) {
+				RegisteredData.push({ date, RegisteredValue });
+			}
+			if (!isNaN(date) && !isNaN(EligibleValue)) {
+				EligibleData.push({ date, EligibleValue });
+			}
+			if (!isNaN(date) && !isNaN(TotalValue)) {
+				TotalData.push({ date, TotalValue });
+			}
+		}
+		
+		RegisteredData.sort((a, b) => a.date - b.date);
+		EligibleData.sort((a, b) => a.date - b.date);
+		TotalData.sort((a, b) => a.date - b.date);
+		
+		// Add legend
+		var legend = chart.children.push(am5.Legend.new(root, {
+			x: am5.p50,
+			centerX: am5.p50
+		}));
+		// When legend item container is hovered, dim all the series except the hovered one
+		legend.itemContainers.template.events.on("pointerover", function(e) {
+			var itemContainer = e.target;
+			// As series list is data of a legend, dataContext is series
+			var series = itemContainer.dataItem.dataContext;
+			chart.series.each(function(chartSeries) {
+				if (chartSeries != series) {
+					chartSeries.strokes.template.setAll({
+						strokeOpacity: 0.15,
+						stroke: am5.color(0x000000)
+					});
+				} else {
+					chartSeries.strokes.template.setAll({
+						strokeWidth: 2
+					});
+				}
+			})
+		});
+		// When legend item container is unhovered, make all series as they are
+		legend.itemContainers.template.events.on("pointerout", function(e) {
+			var itemContainer = e.target;
+			var series = itemContainer.dataItem.dataContext;
+			chart.series.each(function(chartSeries) {
+				chartSeries.strokes.template.setAll({
+					strokeOpacity: 1,
+					strokeWidth: 2,
+					stroke: chartSeries.get("fill")
+				});
+			});
+		});
+		legend.data.setAll(chart.series.values);
+		
+		RegisteredSeries.data.setAll(RegisteredData);
+		EligibleSeries.data.setAll(EligibleData);
+		TotalSeries.data.setAll(TotalData);
+		RegisteredSbSeries.data.setAll(RegisteredData);
+		EligibleSbSeries.data.setAll(EligibleData);
+		TotalSbSeries.data.setAll(TotalData);
+		
+		RegisteredSeries.appear(1000);
+		EligibleSeries.appear(1000);
+		TotalSeries.appear(1000);
+		chart.appear(1000, 100);
+	});  
 }); // end am5.ready()
 </script>
 
 <!-- HTML -->
-<div id="chartdiv"></div>
+<div id="GoldStockchartdiv"></div>
+https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
+https://www.amcharts.com/demos/combined-bullet-column-line-chart/
+https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
