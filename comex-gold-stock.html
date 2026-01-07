@@ -93,7 +93,7 @@ var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStoc
   tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
 
-var yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
+var GoldStockChart_yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
   //logarithmic: true,
   autoZoom: true,
   renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
@@ -104,7 +104,7 @@ var yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
 var RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Registered",
   xAxis: GoldStockChart_xAxis,
-  yAxis: yAxis,
+  yAxis: GoldStockChart_yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
   fill: am5.color(0x007BFF),
@@ -120,7 +120,7 @@ RegisteredSeries.strokes.template.setAll({
 var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Eligible",
   xAxis: GoldStockChart_xAxis,
-  yAxis: yAxis,
+  yAxis: GoldStockChart_yAxis,
   valueYField: "EligibleValue",
   valueXField: "date",
   strokeWidth: 5,
@@ -137,7 +137,7 @@ EligibleSeries.strokes.template.setAll({
 var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Total",
   xAxis: GoldStockChart_xAxis,
-  yAxis: yAxis,
+  yAxis: GoldStockChart_yAxis,
   valueYField: "TotalValue",
   valueXField: "date",
   strokeWidth: 5,
