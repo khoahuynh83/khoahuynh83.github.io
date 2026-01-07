@@ -92,11 +92,23 @@ var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStoc
   }),
   tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
+var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.DateAxis.new(RegisteredGoldStockRoot, {
+  baseInterval: { timeUnit: "day", count: 1 },
+  renderer: am5xy.AxisRendererX.new(RegisteredGoldStockRoot, {
+    minorGridEnabled: true
+  }),
+  tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {})
+}));
 
 var GoldStockChart_yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
   //logarithmic: true,
   autoZoom: true,
   renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
+}));
+var RegisteredGoldStockChart_yAxis = RegisteredGoldStockChart.yAxes.push(am5xy.ValueAxis.new(RegisteredGoldStockRoot, {
+  //logarithmic: true,
+  autoZoom: true,
+  renderer: am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {})
 }));
 
 // Add series
