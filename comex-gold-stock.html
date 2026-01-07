@@ -195,13 +195,46 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 	  EligibleData.sort((a, b) => a.date - b.date);
 	  TotalData.sort((a, b) => a.date - b.date);
 	  
-	  var legend = chart.children.push(
-  am5.Legend.new(root, {
-    x: am5.p50,
-    centerX: am5.p50
+	  var legend = chart.children.push(am5.Legend.new(root, {
+		x: am5.p50,
+		centerX: am5.p50
+	  }));
+	  legend.data.setAll(chart.series.values);
+	  
+	  // When legend item container is hovered, dim all the series except the hovered one
+legend.itemContainers.template.events.on("pointerover", function(e) {
+  var itemContainer = e.target;
+
+  // As series list is data of a legend, dataContext is series
+  var series = itemContainer.dataItem.dataContext;
+
+  chart.series.each(function(chartSeries) {
+    if (chartSeries != series) {
+      chartSeries.strokes.template.setAll({
+        strokeOpacity: 0.15,
+        stroke: am5.color(0x000000)
+      });
+    } else {
+      chartSeries.strokes.template.setAll({
+        strokeWidth: 3
+      });
+    }
   })
-);
-legend.data.setAll(chart.series.values);
+});
+
+// When legend item container is unhovered, make all series as they are
+legend.itemContainers.template.events.on("pointerout", function(e) {
+  var itemContainer = e.target;
+  var series = itemContainer.dataItem.dataContext;
+
+  chart.series.each(function(chartSeries) {
+    chartSeries.strokes.template.setAll({
+      strokeOpacity: 1,
+      strokeWidth: 1,
+      stroke: chartSeries.get("fill")
+    });
+  });
+})
 
       RegisteredSeries.data.setAll(RegisteredData);
 	  EligibleSeries.data.setAll(EligibleData);
