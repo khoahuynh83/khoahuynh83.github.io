@@ -168,87 +168,81 @@ var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(root, {
 fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY0fZs9nttq4/gviz/tq?tqx=out:csv&gid=0")
     .then(response => response.text())
     .then(csv => {
-      const lines = csv.trim().split("\n");
-      const RegisteredData = [];
-	  const EligibleData = [];
-	  const TotalData = [];
-
-      for (let i = 1; i < lines.length; i++) {
-        let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-        const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7]];
-        const date = new Date(dateStr.trim()).getTime();
-        const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
-		const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
-		const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
-        if (!isNaN(date) && !isNaN(RegisteredValue)) {
-          RegisteredData.push({ date, RegisteredValue });
-        }
-		if (!isNaN(date) && !isNaN(EligibleValue)) {
-          EligibleData.push({ date, EligibleValue });
-        }
-		if (!isNaN(date) && !isNaN(TotalValue)) {
-          TotalData.push({ date, TotalValue });
-        }
-      }
-
-      RegisteredData.sort((a, b) => a.date - b.date);
-	  EligibleData.sort((a, b) => a.date - b.date);
-	  TotalData.sort((a, b) => a.date - b.date);
-	  
-	  var legend = chart.children.push(am5.Legend.new(root, {
-		x: am5.p50,
-		centerX: am5.p50
-	  }));
-	  
-	  // When legend item container is hovered, dim all the series except the hovered one
-legend.itemContainers.template.events.on("pointerover", function(e) {
-  var itemContainer = e.target;
-
-  // As series list is data of a legend, dataContext is series
-  var series = itemContainer.dataItem.dataContext;
-
-  chart.series.each(function(chartSeries) {
-    if (chartSeries != series) {
-      chartSeries.strokes.template.setAll({
-        strokeOpacity: 0.15,
-        stroke: am5.color(0x000000)
-      });
-    } else {
-      chartSeries.strokes.template.setAll({
-        strokeWidth: 3
-      });
-    }
-  })
-});
-
-// When legend item container is unhovered, make all series as they are
-legend.itemContainers.template.events.on("pointerout", function(e) {
-  var itemContainer = e.target;
-  var series = itemContainer.dataItem.dataContext;
-
-  chart.series.each(function(chartSeries) {
-    chartSeries.strokes.template.setAll({
-      strokeOpacity: 1,
-      strokeWidth: 1,
-      stroke: chartSeries.get("fill")
-    });
-  });
-});
-legend.data.setAll(chart.series.values);
-
-      RegisteredSeries.data.setAll(RegisteredData);
-	  EligibleSeries.data.setAll(EligibleData);
-	  TotalSeries.data.setAll(TotalData);
-      RegisteredSbSeries.data.setAll(RegisteredData);
-	  EligibleSbSeries.data.setAll(EligibleData);
-	  TotalSbSeries.data.setAll(TotalData);
-
-      RegisteredSeries.appear(1000);
-	  EligibleSeries.appear(1000);
-	  TotalSeries.appear(1000);
-      chart.appear(1000, 100);
-    });
-  
+		const lines = csv.trim().split("\n");
+		const RegisteredData = [];
+		const EligibleData = [];
+		const TotalData = [];
+		
+		for (let i = 1; i < lines.length; i++) {
+			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7]];
+			const date = new Date(dateStr.trim()).getTime();
+			const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
+			const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
+			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
+			if (!isNaN(date) && !isNaN(RegisteredValue)) {
+				RegisteredData.push({ date, RegisteredValue });
+			}
+			if (!isNaN(date) && !isNaN(EligibleValue)) {
+				EligibleData.push({ date, EligibleValue });
+			}
+			if (!isNaN(date) && !isNaN(TotalValue)) {
+				TotalData.push({ date, TotalValue });
+			}
+		}
+		
+		RegisteredData.sort((a, b) => a.date - b.date);
+		EligibleData.sort((a, b) => a.date - b.date);
+		TotalData.sort((a, b) => a.date - b.date);
+		
+		// Add legend
+		var legend = chart.children.push(am5.Legend.new(root, {
+			x: am5.p50,
+			centerX: am5.p50
+		}));
+		// When legend item container is hovered, dim all the series except the hovered one
+		legend.itemContainers.template.events.on("pointerover", function(e) {
+			var itemContainer = e.target;
+			// As series list is data of a legend, dataContext is series
+			var series = itemContainer.dataItem.dataContext;
+			chart.series.each(function(chartSeries) {
+				if (chartSeries != series) {
+					chartSeries.strokes.template.setAll({
+						strokeOpacity: 0.15,
+						stroke: am5.color(0x000000)
+					});
+				} else {
+					chartSeries.strokes.template.setAll({
+						strokeWidth: 2
+					});
+				}
+			})
+		});
+		// When legend item container is unhovered, make all series as they are
+		legend.itemContainers.template.events.on("pointerout", function(e) {
+			var itemContainer = e.target;
+			var series = itemContainer.dataItem.dataContext;
+			chart.series.each(function(chartSeries) {
+				chartSeries.strokes.template.setAll({
+					strokeWidth: 2,
+					stroke: chartSeries.get("fill")
+				});
+			});
+		});
+		legend.data.setAll(chart.series.values);
+		
+		RegisteredSeries.data.setAll(RegisteredData);
+		EligibleSeries.data.setAll(EligibleData);
+		TotalSeries.data.setAll(TotalData);
+		RegisteredSbSeries.data.setAll(RegisteredData);
+		EligibleSbSeries.data.setAll(EligibleData);
+		TotalSbSeries.data.setAll(TotalData);
+		
+		RegisteredSeries.appear(1000);
+		EligibleSeries.appear(1000);
+		TotalSeries.appear(1000);
+		chart.appear(1000, 100);
+	});  
 }); // end am5.ready()
 </script>
 
