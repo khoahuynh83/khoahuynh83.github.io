@@ -152,14 +152,14 @@ RegisteredGoldStockChart_RegisteredSeries.strokes.template.setAll({
   strokeWidth: 2
 });
 var RegisteredGoldStockChart_ChangeOfRegisteredSeries = RegisteredGoldStockChart.series.push(
-  am5xy.ColumnSeries.new(root, {
+  am5xy.ColumnSeries.new(RegisteredGoldStockRoot, {
     name: "Δ Registered",
     xAxis: RegisteredGoldStockChart_xAxis,
     yAxis: RegisteredGoldStockChart_yAxis1,
     valueYField: "ChangeOfRegisteredValue",
     valueXField: "date",
     clustered: false,
-    tooltip: am5.Tooltip.new(root, {
+    tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {
       pointerOrientation: "horizontal",
       labelText: "{name}: {valueY} (oz)"
     })
