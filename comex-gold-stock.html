@@ -113,7 +113,7 @@ var RegisteredGoldStockChart_yAxis = RegisteredGoldStockChart.yAxes.push(am5xy.V
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-var RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
+var GoldStockChart_RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Registered",
   xAxis: GoldStockChart_xAxis,
   yAxis: GoldStockChart_yAxis,
@@ -125,7 +125,7 @@ var RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStock
     labelText: "{name}: {valueY} (oz)"
   })
 }));
-RegisteredSeries.strokes.template.setAll({
+GoldStockChart_RegisteredSeries.strokes.template.setAll({
   strokeWidth: 2
 });
 
@@ -276,14 +276,14 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		});
 		legend.data.setAll(GoldStockChart.series.values);
 		
-		RegisteredSeries.data.setAll(RegisteredData);
+		GoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
 		EligibleSeries.data.setAll(EligibleData);
 		TotalSeries.data.setAll(TotalData);
 		RegisteredSbSeries.data.setAll(RegisteredData);
 		EligibleSbSeries.data.setAll(EligibleData);
 		TotalSbSeries.data.setAll(TotalData);
 		
-		RegisteredSeries.appear(1000);
+		GoldStockChart_RegisteredSeries.appear(1000);
 		EligibleSeries.appear(1000);
 		TotalSeries.appear(1000);
 		GoldStockChart.appear(1000, 100);
