@@ -75,13 +75,15 @@ var RegisteredSeries = chart.series.push(am5xy.LineSeries.new(root, {
   yAxis: yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
-  strokeWidth: 5,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(root, {
     labelText: "{name}: {valueY} (oz)"
   })
 }));
+RegisteredSeries.strokes.template.setAll({
+  strokeWidth: 5
+});
 
 var EligibleSeries = chart.series.push(am5xy.LineSeries.new(root, {
   name: "Eligible",
