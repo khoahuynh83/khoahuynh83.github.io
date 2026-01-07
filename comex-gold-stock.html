@@ -194,6 +194,14 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
       RegisteredData.sort((a, b) => a.date - b.date);
 	  EligibleData.sort((a, b) => a.date - b.date);
 	  TotalData.sort((a, b) => a.date - b.date);
+	  
+	  var legend = chart.children.push(
+  am5.Legend.new(root, {
+    x: am5.p50,
+    centerX: am5.p50
+  })
+);
+legend.data.setAll(chart.series.values);
 
       RegisteredSeries.data.setAll(RegisteredData);
 	  EligibleSeries.data.setAll(EligibleData);
