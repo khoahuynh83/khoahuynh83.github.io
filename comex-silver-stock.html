@@ -343,7 +343,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		const TotalData = [];
 		const ChangeOfRegisteredData = [];
 		const ChangeOfEligibleData = [];
-		alert(lines[1]);
+		
 		for (let i = 1; i < lines.length; i++) {
 			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
 			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[5], parts[2], parts[4]];
