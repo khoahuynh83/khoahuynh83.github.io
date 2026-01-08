@@ -89,14 +89,14 @@ function convertDate(dateStr) {
 
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
+var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
   renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
     minorGridEnabled: true
   }),
   tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
-var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.DateAxis.new(RegisteredGoldStockRoot, {
+var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(RegisteredGoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
   renderer: am5xy.AxisRendererX.new(RegisteredGoldStockRoot, {
     minorGridEnabled: true
@@ -131,7 +131,6 @@ var GoldStockChart_RegisteredSeries = GoldStockChart.series.push(am5xy.LineSerie
   yAxis: GoldStockChart_yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
-  connect: false,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(GoldStockRoot, {
@@ -147,7 +146,6 @@ var RegisteredGoldStockChart_RegisteredSeries = RegisteredGoldStockChart.series.
   yAxis: RegisteredGoldStockChart_yAxis,
   valueYField: "RegisteredValue",
   valueXField: "date",
-  connect: false,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {
@@ -184,7 +182,6 @@ var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRo
   yAxis: GoldStockChart_yAxis,
   valueYField: "EligibleValue",
   valueXField: "date",
-  connect: false,
   strokeWidth: 5,
   fill: am5.color(0xFF0000),
   stroke: am5.color(0xFF0000),
@@ -202,7 +199,6 @@ var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot,
   yAxis: GoldStockChart_yAxis,
   valueYField: "TotalValue",
   valueXField: "date",
-  connect: false,
   strokeWidth: 5,
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
@@ -221,7 +217,7 @@ var scrollbar = GoldStockChart.set("scrollbarX", am5xy.XYChartScrollbar.new(Gold
   height: 60
 }));
 
-var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
+var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
   baseInterval: {
     timeUnit: "day",
     count: 1
