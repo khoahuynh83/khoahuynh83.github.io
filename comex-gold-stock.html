@@ -209,7 +209,6 @@ var RegisteredGoldStockChart_ChangeOfRegisteredSeries = RegisteredGoldStockChart
     yAxis: RegisteredGoldStockChart_yAxis1,
     valueYField: "ChangeOfRegisteredValue",
     valueXField: "date",
-    clustered: true,
     tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {
       pointerOrientation: "horizontal",
       labelText: "{name}: {valueY} (oz)"
@@ -254,6 +253,25 @@ var EligibleGoldStockChart_EligibleSeries = EligibleGoldStockChart.series.push(a
 }));
 EligibleGoldStockChart_EligibleSeries.strokes.template.setAll({
   strokeWidth: 2
+});
+var EligibleGoldStockChart_ChangeOfEligibleSeries = EligibleGoldStockChart.series.push(
+  am5xy.ColumnSeries.new(EligibleGoldStockRoot, {
+    name: "Δ Eligible",
+    xAxis: EligibleGoldStockChart_xAxis,
+    yAxis: EligibleGoldStockChart_yAxis1,
+    valueYField: "ChangeOfEligibleValue",
+    valueXField: "date",
+    tooltip: am5.Tooltip.new(EligibleGoldStockRoot, {
+      pointerOrientation: "horizontal",
+      labelText: "{name}: {valueY} (oz)"
+    })
+  })
+);
+EligibleGoldStockChart_ChangeOfEligibleSeries.columns.template.setAll({
+ fill: am5.color(0xFF0000),
+ stroke: am5.color(0xFF0000),
+ fillOpacity: 0.5,
+ strokeOpacity: 0.5
 });
 
 var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
@@ -327,15 +345,17 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		const EligibleData = [];
 		const TotalData = [];
 		const ChangeOfRegisteredData = [];
+		const ChangeOfEligibleData = [];
 		
 		for (let i = 1; i < lines.length; i++) {
 			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfRegisteredStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7], parts[2]];
+			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7], parts[2], parts[4]];
 			const date = new Date(dateStr.trim()).getTime();
 			const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
 			const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
 			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
 			const ChangeOfRegisteredValue = parseFloat(ChangeOfRegisteredStr.replace(/,/g, ""));
+			const ChangeOfEligibleValue = parseFloat(ChangeOfEligibleStr.replace(/,/g, ""));
 			if (!isNaN(date) && !isNaN(RegisteredValue)) {
 				RegisteredData.push({ date, RegisteredValue });
 			}
@@ -348,12 +368,16 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			if (!isNaN(date) && !isNaN(ChangeOfRegisteredValue)) {
 				ChangeOfRegisteredData.push({ date, ChangeOfRegisteredValue });
 			}
+			if (!isNaN(date) && !isNaN(ChangeOfEligibleValue)) {
+				ChangeOfEligibleData.push({ date, ChangeOfEligibleValue });
+			}
 		}
 		
 		RegisteredData.sort((a, b) => a.date - b.date);
 		EligibleData.sort((a, b) => a.date - b.date);
 		TotalData.sort((a, b) => a.date - b.date);
 		ChangeOfRegisteredData.sort((a, b) => a.date - b.date);
+		ChangeOfEligibleData.sort((a, b) => a.date - b.date);
 		
 		// Add legend
 		var legend = GoldStockChart.children.push(am5.Legend.new(GoldStockRoot, {
@@ -398,6 +422,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		EligibleGoldStockChart_EligibleSeries.data.setAll(EligibleData);
 		TotalSeries.data.setAll(TotalData);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.data.setAll(ChangeOfRegisteredData);
+		EligibleGoldStockChart_ChangeOfEligibleSeries.data.setAll(ChangeOfEligibleData);
 		
 		RegisteredSbSeries.data.setAll(RegisteredData);
 		EligibleSbSeries.data.setAll(EligibleData);
@@ -406,6 +431,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		GoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.appear(1000);
+		EligibleGoldStockChart_ChangeOfEligibleSeries.appear(1000);
 		GoldStockChart_EligibleSeries.appear(1000);
 		EligibleGoldStockChart_EligibleSeries.appear(1000);
 		TotalSeries.appear(1000);
