@@ -166,7 +166,7 @@ var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.
 }));
 var EligibleGoldStockChart_yAxis1 = EligibleGoldStockChart.yAxes.push(am5xy.ValueAxis.new(EligibleGoldStockRoot, {
   //logarithmic: true,
-  autoZoom: true,
+  strictMinMaxSelection: true,
   renderer: yRenderer2,
   syncWithAxis: EligibleGoldStockChart_xAxis
 }));
