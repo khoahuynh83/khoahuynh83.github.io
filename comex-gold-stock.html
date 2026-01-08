@@ -297,33 +297,12 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			x: am5.p50,
 			centerX: am5.p50
 		}));
-		var legend1 = RegisteredGoldStockChart.children.push(am5.Legend.new(RegisteredGoldStockRoot, {
-			x: am5.p50,
-			centerX: am5.p50
-		}));
 		// When legend item container is hovered, dim all the series except the hovered one
 		legend.itemContainers.template.events.on("pointerover", function(e) {
 			var itemContainer = e.target;
 			// As series list is data of a legend, dataContext is series
 			var series = itemContainer.dataItem.dataContext;
 			GoldStockChart.series.each(function(chartSeries) {
-				if (chartSeries != series) {
-					chartSeries.strokes.template.setAll({
-						strokeOpacity: 0.15,
-						stroke: am5.color(0x000000)
-					});
-				} else {
-					chartSeries.strokes.template.setAll({
-						strokeWidth: 2
-					});
-				}
-			})
-		});
-		legend1.itemContainers.template.events.on("pointerover", function(e) {
-			var itemContainer = e.target;
-			// As series list is data of a legend, dataContext is series
-			var series = itemContainer.dataItem.dataContext;
-			RegisteredGoldStockChart.series.each(function(chartSeries) {
 				if (chartSeries != series) {
 					chartSeries.strokes.template.setAll({
 						strokeOpacity: 0.15,
@@ -348,19 +327,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 				});
 			});
 		});
-		legend1.itemContainers.template.events.on("pointerout", function(e) {
-			var itemContainer = e.target;
-			var series = itemContainer.dataItem.dataContext;
-			RegisteredGoldStockChart.series.each(function(chartSeries) {
-				chartSeries.strokes.template.setAll({
-					strokeOpacity: 1,
-					strokeWidth: 2,
-					stroke: chartSeries.get("fill")
-				});
-			});
-		});
 		legend.data.setAll(GoldStockChart.series.values);
-		legend1.data.setAll(RegisteredGoldStockChart.series.values);
 		
 		GoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
 		RegisteredGoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
