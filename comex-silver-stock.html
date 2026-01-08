@@ -107,8 +107,8 @@ var EligibleGoldStockChartCursor = EligibleGoldStockChart.set("cursor", am5xy.XY
 EligibleGoldStockChartCursor.lineY.set("visible", false);
 
 function convertDate(dateStr) {
-  // Tách theo dấu "/"
-  const [day, month, year] = dateStr.split("/");
+  // Tách theo dấu "-"
+  const [year, month, day] = dateStr.split("-");
 
   // Ghép lại theo định dạng mm/dd/yyyy
   return `${month}/${day}/${year}`;
