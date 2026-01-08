@@ -89,14 +89,14 @@ function convertDate(dateStr) {
 
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
+var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
   renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
     minorGridEnabled: true
   }),
   tooltip: am5.Tooltip.new(GoldStockRoot, {})
 }));
-var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.DateAxis.new(RegisteredGoldStockRoot, {
+var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(RegisteredGoldStockRoot, {
   baseInterval: { timeUnit: "day", count: 1 },
   renderer: am5xy.AxisRendererX.new(RegisteredGoldStockRoot, {
     minorGridEnabled: true
@@ -217,7 +217,7 @@ var scrollbar = GoldStockChart.set("scrollbarX", am5xy.XYChartScrollbar.new(Gold
   height: 60
 }));
 
-var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.DateAxis.new(GoldStockRoot, {
+var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
   baseInterval: {
     timeUnit: "day",
     count: 1
