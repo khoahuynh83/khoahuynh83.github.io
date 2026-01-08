@@ -8,6 +8,10 @@
   width: 100%;
   height: 500px;
 }
+#EligibleGoldStockchartdiv {
+  width: 100%;
+  height: 500px;
+}
 </style>
 
 <!-- Resources -->
@@ -23,6 +27,7 @@ am5.ready(function() {
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
 var GoldStockRoot = am5.Root.new("GoldStockchartdiv");
 var RegisteredGoldStockRoot = am5.Root.new("RegisteredGoldStockchartdiv");
+var EligibleGoldStockRoot = am5.Root.new("EligibleGoldStockchartdiv");
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
@@ -31,6 +36,9 @@ GoldStockRoot.setThemes([
 ]);
 RegisteredGoldStockRoot.setThemes([
   am5themes_Animated.new(RegisteredGoldStockRoot)
+]);
+EligibleGoldStockRoot.setThemes([
+  am5themes_Animated.new(EligibleGoldStockRoot)
 ]);
 
 // Create chart
@@ -44,6 +52,14 @@ var GoldStockChart = GoldStockRoot.container.children.push(am5xy.XYChart.new(Gol
   paddingLeft: 0
 }));
 var RegisteredGoldStockChart = RegisteredGoldStockRoot.container.children.push(am5xy.XYChart.new(RegisteredGoldStockRoot, {
+  panX: true,
+  panY: true,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  pinchZoomX: true,
+  paddingLeft: 0
+}));
+var EligibleGoldStockChart = EligibleGoldStockRoot.container.children.push(am5xy.XYChart.new(EligibleGoldStockRoot, {
   panX: true,
   panY: true,
   wheelX: "panX",
@@ -67,6 +83,13 @@ var RegisteredGoldStockChartTitle = RegisteredGoldStockChart.plotContainer.child
   x: am5.p50,
   centerX: am5.p50
 }))
+var EligibleGoldStockChartTitle = EligibleGoldStockChart.plotContainer.children.push(am5.Label.new(EligibleGoldStockRoot, {
+  text: "COMEX Eligible Gold Stock",
+  fontSize: 20,
+  fontWeight: "400",
+  x: am5.p50,
+  centerX: am5.p50
+}))
 
 // Add cursor
 // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
@@ -78,6 +101,10 @@ var RegisteredGoldStockChartCursor = RegisteredGoldStockChart.set("cursor", am5x
   behavior: "none"
 }));
 RegisteredGoldStockChartCursor.lineY.set("visible", false);
+var EligibleGoldStockChartCursor = EligibleGoldStockChart.set("cursor", am5xy.XYCursor.new(EligibleGoldStockRoot, {
+  behavior: "none"
+}));
+EligibleGoldStockChartCursor.lineY.set("visible", false);
 
 function convertDate(dateStr) {
   // Tách theo dấu "/"
@@ -103,6 +130,13 @@ var RegisteredGoldStockChart_xAxis = RegisteredGoldStockChart.xAxes.push(am5xy.G
   }),
   tooltip: am5.Tooltip.new(RegisteredGoldStockRoot, {})
 }));
+var EligibleGoldStockChart_xAxis = EligibleGoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(EligibleGoldStockRoot, {
+  baseInterval: { timeUnit: "day", count: 1 },
+  renderer: am5xy.AxisRendererX.new(EligibleGoldStockRoot, {
+    minorGridEnabled: true
+  }),
+  tooltip: am5.Tooltip.new(EligibleGoldStockRoot, {})
+}));
 
 var GoldStockChart_yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
   //logarithmic: true,
@@ -114,13 +148,26 @@ var RegisteredGoldStockChart_yAxis = RegisteredGoldStockChart.yAxes.push(am5xy.V
   autoZoom: true,
   renderer: am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {})
 }));
+var EligibleGoldStockChart_yAxis = EligibleGoldStockChart.yAxes.push(am5xy.ValueAxis.new(EligibleGoldStockRoot, {
+  //logarithmic: true,
+  autoZoom: true,
+  renderer: am5xy.AxisRendererY.new(EligibleGoldStockRoot, {})
+}));
 var yRenderer1 = am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {
+  opposite: true
+});
+var yRenderer2 = am5xy.AxisRendererY.new(EligibleGoldStockRoot, {
   opposite: true
 });
 var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.ValueAxis.new(RegisteredGoldStockRoot, {
   //logarithmic: true,
   renderer: yRenderer1,
   syncWithAxis: RegisteredGoldStockChart_yAxis
+}));
+var EligibleGoldStockChart_yAxis1 = EligibleGoldStockChart.yAxes.push(am5xy.ValueAxis.new(EligibleGoldStockRoot, {
+  //logarithmic: true,
+  renderer: yRenderer2,
+  syncWithAxis: EligibleGoldStockChart_xAxis
 }));
 
 // Add series
@@ -176,7 +223,7 @@ RegisteredGoldStockChart_ChangeOfRegisteredSeries.columns.template.setAll({
  strokeOpacity: 0.5
 });
 
-var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
+var GoldStockChart_EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Eligible",
   xAxis: GoldStockChart_xAxis,
   yAxis: GoldStockChart_yAxis,
@@ -189,7 +236,23 @@ var EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRo
     labelText: "{name}: {valueY} (oz)"
   })
 }));
-EligibleSeries.strokes.template.setAll({
+GoldStockChart_EligibleSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
+var EligibleGoldStockChart_EligibleSeries = EligibleGoldStockChart.series.push(am5xy.LineSeries.new(EligibleGoldStockRoot, {
+  name: "Eligible",
+  xAxis: EligibleGoldStockChart_xAxis,
+  yAxis: EligibleGoldStockChart_yAxis,
+  valueYField: "EligibleValue",
+  valueXField: "date",
+  strokeWidth: 5,
+  fill: am5.color(0xFF0000),
+  stroke: am5.color(0xFF0000),
+  tooltip: am5.Tooltip.new(EligibleGoldStockRoot, {
+    labelText: "{name}: {valueY} (oz)"
+  })
+}));
+EligibleGoldStockChart_EligibleSeries.strokes.template.setAll({
   strokeWidth: 2
 });
 
@@ -331,7 +394,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		
 		GoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
 		RegisteredGoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
-		EligibleSeries.data.setAll(EligibleData);
+		GoldStockChart_EligibleSeries.data.setAll(EligibleData);
+		EligibleGoldStockChart_EligibleSeries.data.setAll(RegisteredData);
 		TotalSeries.data.setAll(TotalData);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.data.setAll(ChangeOfRegisteredData);
 		
@@ -342,9 +406,12 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		GoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.appear(1000);
-		EligibleSeries.appear(1000);
+		GoldStockChart_EligibleSeries.appear(1000);
+		EligibleGoldStockChart_EligibleSeries.appear(1000);
 		TotalSeries.appear(1000);
 		GoldStockChart.appear(1000, 100);
+		RegisteredGoldStockChart.appear(1000, 100);
+		EligibleGoldStockChart.appear(1000, 100);
 	});  
 }); // end am5.ready()
 </script>
@@ -352,6 +419,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 <!-- HTML -->
 <div id="GoldStockchartdiv"></div>
 <div id="RegisteredGoldStockchartdiv"></div>
+<div id="EligibleGoldStockchartdiv"></div>
 https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
 https://www.amcharts.com/demos/combined-bullet-column-line-chart/
 https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
