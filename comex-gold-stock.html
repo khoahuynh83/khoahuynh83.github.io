@@ -166,6 +166,7 @@ var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.
 }));
 var EligibleGoldStockChart_yAxis1 = EligibleGoldStockChart.yAxes.push(am5xy.ValueAxis.new(EligibleGoldStockRoot, {
   //logarithmic: true,
+  strictMinMax: true,
   renderer: yRenderer2,
   syncWithAxis: EligibleGoldStockChart_xAxis
 }));
@@ -228,7 +229,6 @@ var GoldStockChart_EligibleSeries = GoldStockChart.series.push(am5xy.LineSeries.
   yAxis: GoldStockChart_yAxis,
   valueYField: "EligibleValue",
   valueXField: "date",
-  strokeWidth: 5,
   fill: am5.color(0xFF0000),
   stroke: am5.color(0xFF0000),
   tooltip: am5.Tooltip.new(GoldStockRoot, {
@@ -244,7 +244,6 @@ var EligibleGoldStockChart_EligibleSeries = EligibleGoldStockChart.series.push(a
   yAxis: EligibleGoldStockChart_yAxis,
   valueYField: "EligibleValue",
   valueXField: "date",
-  strokeWidth: 5,
   fill: am5.color(0x007BFF),
   stroke: am5.color(0x007BFF),
   tooltip: am5.Tooltip.new(EligibleGoldStockRoot, {
@@ -280,7 +279,6 @@ var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot,
   yAxis: GoldStockChart_yAxis,
   valueYField: "TotalValue",
   valueXField: "date",
-  strokeWidth: 5,
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
   tooltip: am5.Tooltip.new(GoldStockRoot, {
