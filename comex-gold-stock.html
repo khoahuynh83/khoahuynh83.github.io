@@ -159,6 +159,9 @@ var yRenderer1 = am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {
 var yRenderer2 = am5xy.AxisRendererY.new(EligibleGoldStockRoot, {
   opposite: true
 });
+var yRenderer3 = am5xy.AxisRendererY.new(GoldStockRoot, {
+  opposite: true
+});
 var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.ValueAxis.new(RegisteredGoldStockRoot, {
   //logarithmic: true,
   renderer: yRenderer1,
@@ -168,6 +171,11 @@ var EligibleGoldStockChart_yAxis1 = EligibleGoldStockChart.yAxes.push(am5xy.Valu
   //logarithmic: true,
   renderer: yRenderer2,
   syncWithAxis: EligibleGoldStockChart_yAxis
+}));
+var GoldStockChart_yAxis1 = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
+  //logarithmic: true,
+  renderer: yRenderer3,
+  syncWithAxis: GoldStockChart_yAxis
 }));
 
 // Add series
@@ -287,6 +295,25 @@ var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot,
 TotalSeries.strokes.template.setAll({
   strokeWidth: 2
 });
+var ChangeOfTotalSeries = GoldStockChart.series.push(
+  am5xy.ColumnSeries.new(GoldStockRoot, {
+    name: "Δ Total",
+    xAxis: GoldStockChart_xAxis,
+    yAxis: GoldStockChart_yAxis1,
+    valueYField: "ChangeOfTotalValue",
+    valueXField: "date",
+    tooltip: am5.Tooltip.new(GoldStockRoot, {
+      pointerOrientation: "horizontal",
+      labelText: "{name}: {valueY} (oz)"
+    })
+  })
+);
+ChangeOfTotalSeries.columns.template.setAll({
+ fill: am5.color(0xFF0000),
+ stroke: am5.color(0xFF0000),
+ fillOpacity: 0.5,
+ strokeOpacity: 0.5
+});
 
 // Add scrollbar
 // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
@@ -343,17 +370,18 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		const TotalData = [];
 		const ChangeOfRegisteredData = [];
 		const ChangeOfEligibleData = [];
+		const ChangeOfTotalData = [];
 		
-		//for (let i = 1; i < lines.length; i++) {
-		for (let i = 1; i < 3600; i++) {
+		for (let i = 1; i < lines.length; i++) {
 			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7], parts[2], parts[4]];
+			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfTotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7], parts[8], parts[2], parts[4]];
 			const date = new Date(dateStr.trim()).getTime();
 			const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
 			const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
 			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
 			const ChangeOfRegisteredValue = parseFloat(ChangeOfRegisteredStr.replace(/,/g, ""));
 			const ChangeOfEligibleValue = parseFloat(ChangeOfEligibleStr.replace(/,/g, ""));
+			const ChangeOfTotalValue = parseFloat(ChangeOfTotalValueStr.replace(/,/g, ""));
 			if (!isNaN(date) && !isNaN(RegisteredValue)) {
 				RegisteredData.push({ date, RegisteredValue });
 			}
@@ -369,6 +397,9 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			if (!isNaN(date) && !isNaN(ChangeOfEligibleValue)) {
 				ChangeOfEligibleData.push({ date, ChangeOfEligibleValue });
 			}
+			if (!isNaN(date) && !isNaN(ChangeOfTotalValue)) {
+				ChangeOfTotalData.push({ date, ChangeOfTotalValue });
+			}
 		}
 		
 		RegisteredData.sort((a, b) => a.date - b.date);
@@ -376,6 +407,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalData.sort((a, b) => a.date - b.date);
 		ChangeOfRegisteredData.sort((a, b) => a.date - b.date);
 		ChangeOfEligibleData.sort((a, b) => a.date - b.date);
+		ChangeOfTotalData.sort((a, b) => a.date - b.date);
 		
 		// Add legend
 		var legend = GoldStockChart.children.push(am5.Legend.new(GoldStockRoot, {
