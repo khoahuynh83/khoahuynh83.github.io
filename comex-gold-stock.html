@@ -301,15 +301,18 @@ var ChangeOfTotalSeries = GoldStockChart.series.push(
     xAxis: GoldStockChart_xAxis,
     yAxis: GoldStockChart_yAxis1,
     valueYField: "ChangeOfTotalValue",
-    categoryXField: "date"
+    valueXField: "date",
+    tooltip: am5.Tooltip.new(GoldStockRoot, {
+      pointerOrientation: "horizontal",
+      labelText: "{name}: {valueY} (oz)"
+    })
   })
 );
 ChangeOfTotalSeries.columns.template.setAll({
  fill: am5.color(0x000000),
  stroke: am5.color(0x000000),
  fillOpacity: 0.5,
- strokeOpacity: 0.5,
- tooltipText: "{name}: {valueY} (oz)"
+ strokeOpacity: 0.5
 });
 
 // Add scrollbar
