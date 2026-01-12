@@ -169,6 +169,11 @@ var EligibleGoldStockChart_yAxis1 = EligibleGoldStockChart.yAxes.push(am5xy.Valu
   renderer: yRenderer2,
   syncWithAxis: EligibleGoldStockChart_yAxis
 }));
+var GoldStockChart_yAxis1 = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
+  //logarithmic: true,
+  renderer: yRenderer3,
+  syncWithAxis: GoldStockChart_yAxis
+}));
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
@@ -287,6 +292,25 @@ var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot,
 TotalSeries.strokes.template.setAll({
   strokeWidth: 2
 });
+var ChangeOfTotalSeries = GoldStockChart.series.push(
+  am5xy.ColumnSeries.new(GoldStockRoot, {
+    name: "Δ Total",
+    xAxis: GoldStockChart_xAxis,
+    yAxis: GoldStockChart_yAxis1,
+    valueYField: "ChangeOfTotalValue",
+    valueXField: "date",
+    tooltip: am5.Tooltip.new(GoldStockRoot, {
+      pointerOrientation: "horizontal",
+      labelText: "{name}: {valueY} (oz)"
+    })
+  })
+);
+ChangeOfTotalSeries.columns.template.setAll({
+ fill: am5.color(0x000000),
+ stroke: am5.color(0x000000),
+ fillOpacity: 0.5,
+ strokeOpacity: 0.5
+});
 
 // Add scrollbar
 // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
@@ -343,16 +367,18 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		const TotalData = [];
 		const ChangeOfRegisteredData = [];
 		const ChangeOfEligibleData = [];
+		const ChangeOfTotalData = [];
 		
 		for (let i = 1; i < lines.length; i++) {
 			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
-			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[5], parts[2], parts[4]];
+			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfTotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[5], parts[6], parts[2], parts[4]];
 			const date = new Date(dateStr.trim()).getTime();
 			const RegisteredValue = parseFloat(RegisteredValueStr.replace(/,/g, ""));
 			const EligibleValue = parseFloat(EligibleValueStr.replace(/,/g, ""));
 			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
 			const ChangeOfRegisteredValue = parseFloat(ChangeOfRegisteredStr.replace(/,/g, ""));
 			const ChangeOfEligibleValue = parseFloat(ChangeOfEligibleStr.replace(/,/g, ""));
+			const ChangeOfTotalValue = parseFloat(ChangeOfTotalValueStr.replace(/,/g, ""));
 			if (!isNaN(date) && !isNaN(RegisteredValue)) {
 				RegisteredData.push({ date, RegisteredValue });
 			}
@@ -368,6 +394,9 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			if (!isNaN(date) && !isNaN(ChangeOfEligibleValue)) {
 				ChangeOfEligibleData.push({ date, ChangeOfEligibleValue });
 			}
+			if (!isNaN(date) && !isNaN(ChangeOfTotalValue)) {
+				ChangeOfTotalData.push({ date, ChangeOfTotalValue });
+			}
 		}
 		
 		RegisteredData.sort((a, b) => a.date - b.date);
@@ -375,42 +404,13 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalData.sort((a, b) => a.date - b.date);
 		ChangeOfRegisteredData.sort((a, b) => a.date - b.date);
 		ChangeOfEligibleData.sort((a, b) => a.date - b.date);
+		ChangeOfTotalData.sort((a, b) => a.date - b.date);
 		
 		// Add legend
 		var legend = GoldStockChart.children.push(am5.Legend.new(GoldStockRoot, {
 			x: am5.p50,
 			centerX: am5.p50
 		}));
-		// When legend item container is hovered, dim all the series except the hovered one
-		legend.itemContainers.template.events.on("pointerover", function(e) {
-			var itemContainer = e.target;
-			// As series list is data of a legend, dataContext is series
-			var series = itemContainer.dataItem.dataContext;
-			GoldStockChart.series.each(function(chartSeries) {
-				if (chartSeries != series) {
-					chartSeries.strokes.template.setAll({
-						strokeOpacity: 0.15,
-						stroke: am5.color(0x000000)
-					});
-				} else {
-					chartSeries.strokes.template.setAll({
-						strokeWidth: 2
-					});
-				}
-			})
-		});
-		// When legend item container is unhovered, make all series as they are
-		legend.itemContainers.template.events.on("pointerout", function(e) {
-			var itemContainer = e.target;
-			var series = itemContainer.dataItem.dataContext;
-			GoldStockChart.series.each(function(chartSeries) {
-				chartSeries.strokes.template.setAll({
-					strokeOpacity: 1,
-					strokeWidth: 2,
-					stroke: chartSeries.get("fill")
-				});
-			});
-		});
 		legend.data.setAll(GoldStockChart.series.values);
 		
 		GoldStockChart_RegisteredSeries.data.setAll(RegisteredData);
@@ -418,6 +418,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		GoldStockChart_EligibleSeries.data.setAll(EligibleData);
 		EligibleGoldStockChart_EligibleSeries.data.setAll(EligibleData);
 		TotalSeries.data.setAll(TotalData);
+		ChangeOfTotalSeries.data.setAll(ChangeOfTotalData);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.data.setAll(ChangeOfRegisteredData);
 		EligibleGoldStockChart_ChangeOfEligibleSeries.data.setAll(ChangeOfEligibleData);
 		
@@ -432,6 +433,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		EligibleGoldStockChart_EligibleSeries.appear(1000);
 		EligibleGoldStockChart_ChangeOfEligibleSeries.appear(1000);
 		TotalSeries.appear(1000);
+		ChangeOfTotalSeries.appear(1000);
 		GoldStockChart.appear(1000, 100);
 		RegisteredGoldStockChart.appear(1000, 100);
 		EligibleGoldStockChart.appear(1000, 100);
