@@ -159,6 +159,9 @@ var yRenderer1 = am5xy.AxisRendererY.new(RegisteredGoldStockRoot, {
 var yRenderer2 = am5xy.AxisRendererY.new(EligibleGoldStockRoot, {
   opposite: true
 });
+var yRenderer3 = am5xy.AxisRendererY.new(GoldStockRoot, {
+  opposite: true
+});
 var RegisteredGoldStockChart_yAxis1 = RegisteredGoldStockChart.yAxes.push(am5xy.ValueAxis.new(RegisteredGoldStockRoot, {
   //logarithmic: true,
   renderer: yRenderer1,
