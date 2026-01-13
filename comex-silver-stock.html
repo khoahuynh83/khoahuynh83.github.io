@@ -440,12 +440,24 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		GoldStockChart.appear(1000, 100);
 		RegisteredGoldStockChart.appear(1000, 100);
 		EligibleGoldStockChart.appear(1000, 100);
-	});  
+	});
+	document.getElementById("logSelect").addEventListener("change", function(e) {
+		if (e.target.value === "yes") {
+			GoldStockChart_yAxis.set("logarithmic", true);
+		} else {
+			GoldStockChart_yAxis.set("logarithmic", false);
+		}
+	});
 }); // end am5.ready()
 </script>
 
 <!-- HTML -->
 <div id="GoldStockchartdiv"></div>
+<label for="logSelect">Logarithmic scale:</label>
+<select id="logSelect">
+	<option value="yes">Yes</option>
+	<option value="no" selected>No</option>
+</select>
 <div id="RegisteredGoldStockchartdiv"></div>
 <div id="EligibleGoldStockchartdiv"></div>
 https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
