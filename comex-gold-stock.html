@@ -372,7 +372,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		const ChangeOfEligibleData = [];
 		const ChangeOfTotalData = [];
 		
-		for (let i = 1; i < lines.length; i++) {
+		//for (let i = 1; i < lines.length; i++) {
+		for (let i = 1; i < 3000; i++) {
 			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
 			const [dateStr, RegisteredValueStr, EligibleValueStr, TotalValueStr, ChangeOfTotalValueStr, ChangeOfRegisteredStr, ChangeOfEligibleStr] = [convertDate(parts[0]), parts[1], parts[3], parts[7], parts[8], parts[2], parts[4]];
 			const date = new Date(dateStr.trim()).getTime();
@@ -457,7 +458,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 <label for="logSelect">Logarithmic scale:</label>
 <select id="logSelect">
 	<option value="yes">Yes</option>
-	<option value="no">No</option>
+	<option value="no" selected>No</option>
 </select>
 <div id="RegisteredGoldStockchartdiv"></div>
 <div id="EligibleGoldStockchartdiv"></div>
