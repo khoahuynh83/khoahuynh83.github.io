@@ -432,6 +432,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		
 		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[TotalData.length-1].date).toLocaleDateString("vi-VN");
 		document.getElementById("RegisteredLabel").innerHTML = "Registered: " + parseFloat(RegisteredData[RegisteredData.length-1].RegisteredValue).toLocaleString("en-US") + " (oz)" + "; " + parseFloat(ChangeOfRegisteredData[ChangeOfRegisteredData.length-1].ChangeOfRegisteredValue).toLocaleString("en-US") + " (oz)";
+		document.getElementById("EligibleLabel").innerHTML = "Eligible: " + parseFloat(EligibleData[EligibleData.length-1].EligibleValue).toLocaleString("en-US") + " (oz)" + "; " + parseFloat(ChangeOfEligibleData[ChangeOfEligibleData.length-1].ChangeOfEligibleValue).toLocaleString("en-US") + " (oz)";
 		
 		GoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
