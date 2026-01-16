@@ -430,7 +430,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		EligibleSbSeries.data.setAll(EligibleData);
 		TotalSbSeries.data.setAll(TotalData);
 		
-		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[0].date).toLocaleDateString("vi-VN");
+		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[TotalData.length-1].date).toLocaleDateString("vi-VN");
 		
 		GoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
