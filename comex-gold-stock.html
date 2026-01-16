@@ -450,14 +450,16 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			GoldStockChart_yAxis.set("logarithmic", false);
 		}
 	});
+	
+	document.getElementById("DateLabel").innerHTML = "fuck";
 }); // end am5.ready()
 </script>
 
 <!-- HTML -->
-<label for="DateLabel">Date:</label>
-<label for="RegisteredLabel">Registered:</label>
-<label for="EligibleLabel">Eligible:</label>
-<label for="TotalLabel">Total:</label>
+<label for="DateLabel">Date:</label><br>
+<label for="RegisteredLabel">Registered:</label><br>
+<label for="EligibleLabel">Eligible:</label><br>
+<label for="TotalLabel">Total:</label><br>
 <div id="GoldStockchartdiv"></div>
 <label for="logSelect">Logarithmic scale:</label>
 <select id="logSelect">
