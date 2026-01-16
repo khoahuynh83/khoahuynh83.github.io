@@ -430,6 +430,8 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		EligibleSbSeries.data.setAll(EligibleData);
 		TotalSbSeries.data.setAll(TotalData);
 		
+		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[0].date).toLocaleDateString("vi-VN");
+		
 		GoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_RegisteredSeries.appear(1000);
 		RegisteredGoldStockChart_ChangeOfRegisteredSeries.appear(1000);		
@@ -450,8 +452,6 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			GoldStockChart_yAxis.set("logarithmic", false);
 		}
 	});
-	
-	document.getElementById("DateLabel").innerHTML = "Date: " + new Date(GoldStockChart.data[GoldStockChart.data.length - 1].date).toLocaleDateString("vi-VN");
 }); // end am5.ready()
 </script>
 
