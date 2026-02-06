@@ -1,0 +1,245 @@
+<!-- Styles -->
+<style>
+#GoldStockchartdiv {
+  width: 100%;
+  height: 500px;
+}
+#RegisteredGoldStockchartdiv {
+  width: 100%;
+  height: 500px;
+}
+#EligibleGoldStockchartdiv {
+  width: 100%;
+  height: 500px;
+}
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am5.ready(function() {
+
+// Create element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var GoldStockRoot = am5.Root.new("GoldStockchartdiv");
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+GoldStockRoot.setThemes([
+  am5themes_Animated.new(GoldStockRoot)
+]);
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var GoldStockChart = GoldStockRoot.container.children.push(am5xy.XYChart.new(GoldStockRoot, {
+  panX: true,
+  panY: true,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  pinchZoomX: true,
+  paddingLeft: 0
+}));
+
+// Chart title
+var GoldStockChartTitle = GoldStockChart.plotContainer.children.push(am5.Label.new(GoldStockRoot, {
+  text: "Shanghai Silver Stock",
+  fontSize: 20,
+  fontWeight: "400",
+  x: am5.p50,
+  centerX: am5.p50
+}))
+
+// Add cursor
+// https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+var GoldStockChartCursor = GoldStockChart.set("cursor", am5xy.XYCursor.new(GoldStockRoot, {
+  behavior: "none"
+}));
+GoldStockChartCursor.lineY.set("visible", false);
+
+function convertDate(dateStr) {
+  // Tách theo dấu "-"
+  const [year, month, day] = dateStr.split("-");
+
+  // Ghép lại theo định dạng mm/dd/yyyy
+  return `${month}/${day}/${year}`;
+}
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var GoldStockChart_xAxis = GoldStockChart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
+  baseInterval: { timeUnit: "day", count: 1 },
+  renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
+    minorGridEnabled: true
+  }),
+  tooltip: am5.Tooltip.new(GoldStockRoot, {})
+}));
+var GoldStockChart_yAxis = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
+  //logarithmic: true,
+  autoZoom: true,
+  renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
+}));
+var yRenderer3 = am5xy.AxisRendererY.new(GoldStockRoot, {
+  opposite: true
+});
+var GoldStockChart_yAxis1 = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldStockRoot, {
+  //logarithmic: true,
+  renderer: yRenderer3,
+  syncWithAxis: GoldStockChart_yAxis
+}));
+
+// Add series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+var GoldStockChart_RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
+  name: "Registered",
+  xAxis: GoldStockChart_xAxis,
+  yAxis: GoldStockChart_yAxis,
+  valueYField: "RegisteredValue",
+  valueXField: "date",
+  fill: am5.color(0x007BFF),
+  stroke: am5.color(0x007BFF),
+  tooltip: am5.Tooltip.new(GoldStockRoot, {
+    labelText: "{name}: {valueY} (oz)"
+  })
+}));
+GoldStockChart_RegisteredSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
+
+var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
+  name: "Total",
+  xAxis: GoldStockChart_xAxis,
+  yAxis: GoldStockChart_yAxis,
+  valueYField: "TotalValue",
+  valueXField: "date",
+  fill: am5.color(0xFFA500),
+  stroke: am5.color(0xFFA500),
+  tooltip: am5.Tooltip.new(GoldStockRoot, {
+    labelText: "{name}: {valueY} (oz)"
+  })
+}));
+TotalSeries.strokes.template.setAll({
+  strokeWidth: 2
+});
+var ChangeOfTotalSeries = GoldStockChart.series.push(
+  am5xy.ColumnSeries.new(GoldStockRoot, {
+    name: "Δ Total",
+    xAxis: GoldStockChart_xAxis,
+    yAxis: GoldStockChart_yAxis1,
+    valueYField: "ChangeOfTotalValue",
+    valueXField: "date",
+    tooltip: am5.Tooltip.new(GoldStockRoot, {
+      pointerOrientation: "horizontal",
+      labelText: "{name}: {valueY} (oz)"
+    })
+  })
+);
+ChangeOfTotalSeries.columns.template.setAll({
+ fill: am5.color(0x000000),
+ stroke: am5.color(0x000000),
+ fillOpacity: 0.5,
+ strokeOpacity: 0.5
+});
+
+// Add scrollbar
+// https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+var scrollbar = GoldStockChart.set("scrollbarX", am5xy.XYChartScrollbar.new(GoldStockRoot, {
+  orientation: "horizontal",
+  height: 60
+}));
+
+var sbDateAxis = scrollbar.chart.xAxes.push(am5xy.GaplessDateAxis.new(GoldStockRoot, {
+  baseInterval: {
+    timeUnit: "day",
+    count: 1
+  },
+  renderer: am5xy.AxisRendererX.new(GoldStockRoot, {
+    minorGridEnabled: true,
+    minGridDistance: 70
+  })
+}));
+
+var sbValueAxis = scrollbar.chart.yAxes.push(
+  am5xy.ValueAxis.new(GoldStockRoot, {
+    renderer: am5xy.AxisRendererY.new(GoldStockRoot, {})
+  })
+);
+
+var TotalSbSeries = scrollbar.chart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
+  valueYField: "TotalValue",
+  valueXField: "date",
+  xAxis: sbDateAxis,
+  yAxis: sbValueAxis
+}));
+
+// Load CSV data
+fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY0fZs9nttq4/gviz/tq?tqx=out:csv&gid=2038718641")
+    .then(response => response.text())
+    .then(csv => {
+		const lines = csv.trim().split("\n");
+		const TotalData = [];
+		const ChangeOfTotalData = [];
+		
+		for (let i = 1; i < lines.length; i++) {
+			let parts = lines[i].split(/","/).map(s => s.replace(/"/g, "").trim());
+			const [dateStr, TotalValueStr, ChangeOfTotalValueStr] = [convertDate(parts[0]), parts[1], parts[2]];
+			const date = new Date(dateStr.trim()).getTime();
+			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
+			const ChangeOfTotalValue = parseFloat(ChangeOfTotalValueStr.replace(/,/g, ""));
+			if (!isNaN(date) && !isNaN(TotalValue)) {
+				TotalData.push({ date, TotalValue });
+			}
+			if (!isNaN(date) && !isNaN(ChangeOfTotalValue)) {
+				ChangeOfTotalData.push({ date, ChangeOfTotalValue });
+			}
+		}
+		
+		TotalData.sort((a, b) => a.date - b.date);
+		ChangeOfTotalData.sort((a, b) => a.date - b.date);
+		
+		// Add legend
+		var legend = GoldStockChart.children.push(am5.Legend.new(GoldStockRoot, {
+			x: am5.p50,
+			centerX: am5.p50
+		}));
+		legend.data.setAll(GoldStockChart.series.values);
+		
+		TotalSeries.data.setAll(TotalData);
+		ChangeOfTotalSeries.data.setAll(ChangeOfTotalData);
+		
+		TotalSbSeries.data.setAll(TotalData);
+
+		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[TotalData.length-1].date).toLocaleDateString("vi-VN");
+		document.getElementById("TotalLabel").innerHTML = "Total: " + parseFloat(TotalData[TotalData.length-1].TotalValue).toLocaleString("en-US") + " (oz)" + "; " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue).toLocaleString("en-US") + " (oz)";
+		
+		TotalSeries.appear(1000);
+		ChangeOfTotalSeries.appear(1000);
+		GoldStockChart.appear(1000, 100);
+	});
+	document.getElementById("logSelect").addEventListener("change", function(e) {
+		if (e.target.value === "yes") {
+			GoldStockChart_yAxis.set("logarithmic", true);
+		} else {
+			GoldStockChart_yAxis.set("logarithmic", false);
+		}
+	});
+}); // end am5.ready()
+</script>
+
+<!-- HTML -->
+<label id="DateLabel">Date:</label><br>
+<label id="TotalLabel">Total:</label><br>
+<div id="GoldStockchartdiv"></div>
+<label for="logSelect">Logarithmic scale:</label>
+<select id="logSelect">
+	<option value="yes">Yes</option>
+	<option value="no" selected>No</option>
+</select>
+<div id="RegisteredGoldStockchartdiv"></div>
+<div id="EligibleGoldStockchartdiv"></div>
+https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
+https://www.amcharts.com/demos/combined-bullet-column-line-chart/
+https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
