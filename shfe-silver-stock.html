@@ -85,22 +85,6 @@ var GoldStockChart_yAxis1 = GoldStockChart.yAxes.push(am5xy.ValueAxis.new(GoldSt
 
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-var GoldStockChart_RegisteredSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
-  name: "Registered",
-  xAxis: GoldStockChart_xAxis,
-  yAxis: GoldStockChart_yAxis,
-  valueYField: "RegisteredValue",
-  valueXField: "date",
-  fill: am5.color(0x007BFF),
-  stroke: am5.color(0x007BFF),
-  tooltip: am5.Tooltip.new(GoldStockRoot, {
-    labelText: "{name}: {valueY} (oz)"
-  })
-}));
-GoldStockChart_RegisteredSeries.strokes.template.setAll({
-  strokeWidth: 2
-});
-
 var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot, {
   name: "Total",
   xAxis: GoldStockChart_xAxis,
@@ -230,8 +214,6 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 	<option value="yes">Yes</option>
 	<option value="no" selected>No</option>
 </select>
-<div id="RegisteredGoldStockchartdiv"></div>
-<div id="EligibleGoldStockchartdiv"></div>
 https://www.amcharts.com/demos/line-chart-with-scroll-and-zoom/
 https://www.amcharts.com/demos/combined-bullet-column-line-chart/
 https://www.amcharts.com/docs/v5/charts/xy-chart/series/line-series/
