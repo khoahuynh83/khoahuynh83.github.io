@@ -4,14 +4,6 @@
   width: 100%;
   height: 500px;
 }
-#RegisteredGoldStockchartdiv {
-  width: 100%;
-  height: 500px;
-}
-#EligibleGoldStockchartdiv {
-  width: 100%;
-  height: 500px;
-}
 </style>
 
 <!-- Resources -->
@@ -118,7 +110,7 @@ var TotalSeries = GoldStockChart.series.push(am5xy.LineSeries.new(GoldStockRoot,
   fill: am5.color(0xFFA500),
   stroke: am5.color(0xFFA500),
   tooltip: am5.Tooltip.new(GoldStockRoot, {
-    labelText: "{name}: {valueY} (oz)"
+    labelText: "{name}: {valueY} (kg)"
   })
 }));
 TotalSeries.strokes.template.setAll({
@@ -133,7 +125,7 @@ var ChangeOfTotalSeries = GoldStockChart.series.push(
     valueXField: "date",
     tooltip: am5.Tooltip.new(GoldStockRoot, {
       pointerOrientation: "horizontal",
-      labelText: "{name}: {valueY} (oz)"
+      labelText: "{name}: {valueY} (kg)"
     })
   })
 );
@@ -190,10 +182,10 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
 			const ChangeOfTotalValue = parseFloat(ChangeOfTotalValueStr.replace(/,/g, ""));
 			if (!isNaN(date) && !isNaN(TotalValue)) {
-				TotalData.push({ date, TotalValue/1000 });
+				TotalData.push({ date, TotalValue });
 			}
 			if (!isNaN(date) && !isNaN(ChangeOfTotalValue)) {
-				ChangeOfTotalData.push({ date, ChangeOfTotalValue/1000 });
+				ChangeOfTotalData.push({ date, ChangeOfTotalValue });
 			}
 		}
 		
@@ -213,7 +205,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalSbSeries.data.setAll(TotalData);
 
 		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[TotalData.length-1].date).toLocaleDateString("vi-VN");
-		document.getElementById("TotalLabel").innerHTML = "Total: " + parseFloat(TotalData[TotalData.length-1].TotalValue).toLocaleString("en-US") + " (oz)" + "; " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue).toLocaleString("en-US") + " (oz)";
+		document.getElementById("TotalLabel").innerHTML = "Total: " + parseFloat(TotalData[TotalData.length-1].TotalValue).toLocaleString("en-US") + " (kg)" + "; " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue).toLocaleString("en-US") + " (kg)";
 		
 		TotalSeries.appear(1000);
 		ChangeOfTotalSeries.appear(1000);
