@@ -46,7 +46,7 @@ var GoldStockChart = GoldStockRoot.container.children.push(am5xy.XYChart.new(Gol
 
 // Chart title
 var GoldStockChartTitle = GoldStockChart.plotContainer.children.push(am5.Label.new(GoldStockRoot, {
-  text: "Shanghai Silver Stock",
+  text: "SHFE Silver Stock",
   fontSize: 20,
   fontWeight: "400",
   x: am5.p50,
@@ -190,10 +190,10 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 			const TotalValue = parseFloat(TotalValueStr.replace(/,/g, ""));
 			const ChangeOfTotalValue = parseFloat(ChangeOfTotalValueStr.replace(/,/g, ""));
 			if (!isNaN(date) && !isNaN(TotalValue)) {
-				TotalData.push({ date, TotalValue });
+				TotalData.push({ date, TotalValue/1000 });
 			}
 			if (!isNaN(date) && !isNaN(ChangeOfTotalValue)) {
-				ChangeOfTotalData.push({ date, ChangeOfTotalValue });
+				ChangeOfTotalData.push({ date, ChangeOfTotalValue/1000 });
 			}
 		}
 		
