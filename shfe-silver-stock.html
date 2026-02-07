@@ -189,7 +189,7 @@ fetch("https://docs.google.com/spreadsheets/d/1MT5JrMDiGQJLuIoie4Wp5URbZVbA39rTY
 		TotalSbSeries.data.setAll(TotalData);
 
 		document.getElementById("DateLabel").innerHTML = "Date: " + new Date(TotalData[TotalData.length-1].date).toLocaleDateString("vi-VN");
-		document.getElementById("TotalLabel").innerHTML = "Total: " + parseFloat(TotalData[TotalData.length-1].TotalValue).toLocaleString("en-US") + " (kg)" + "; " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue).toLocaleString("en-US") + " (kg)";
+		document.getElementById("TotalLabel").innerHTML = "Total: " + parseFloat(TotalData[TotalData.length-1].TotalValue).toLocaleString("en-US") + " (kg) ≈ " + parseFloat(TotalData[TotalData.length-1].TotalValue*32.15).toLocaleString("en-US") + " (oz)" + "; " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue).toLocaleString("en-US") + " (kg)  ≈ " + parseFloat(ChangeOfTotalData[ChangeOfTotalData.length-1].ChangeOfTotalValue*32.15).toLocaleString("en-US") + " (oz)";
 		
 		TotalSeries.appear(1000);
 		ChangeOfTotalSeries.appear(1000);
